@@ -18,7 +18,7 @@ const PRIVATE_APP_ACCESS = process.env.HAPIKEY;
 app.get("/", async (req, res) => {
     
     const url =
-      "https://api.hubspot.com/crm/v3/objects/2-17953191?properties=name&properties=address&properties=favriates&limit=10";
+      "https://api.hubspot.com/crm/v3/objects/2-17953191?properties=name&properties=address&properties=favorites&limit=10";
 
     const headers = {
       Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
@@ -48,6 +48,30 @@ app.get("/update-cobj", (req, res) => {
 // TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
 
 // * Code for Route 3 goes here
+
+app.post("/update-cobj", async (req, res) => {
+    const url = `https://api.hubapi.com/crm/v3/objects/2-17953191`;
+
+    const headers = {
+      Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
+      "Content-Type": "application/json",
+    };
+
+    const data = {
+      properties: {
+        name: req.body.name,
+        address: req.body.address,
+        favorites: req.body.favorites,
+      },
+    };
+    
+    try {
+      await axios.post(url, data, { headers });
+      res.redirect("/");
+    } catch (err) {
+      console.error(err);
+    }
+  });
 
 // * Localhost
 app.listen(3000, () => console.log('Listening on http://localhost:3000'));
